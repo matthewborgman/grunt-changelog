@@ -15,7 +15,7 @@ module.exports = function (grunt) {
 
 				var	branchRegex		= /^\(.*\) /,
 					buildRegex		= /^Generate Build.*/i,
-					changelogRegex	= /^Increment Version.*/i,
+					changelogRegex	= /^Increment Version|^Update Changelog.*/im,
 					hash			= commit.substr(0, 7),
 					message			= commit.substr(8),
 					tag,
