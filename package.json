@@ -1,0 +1,34 @@
+{
+  "name": "grunt-changelog",
+  "version": "0.1.0",
+  "description": "Generate a changelog from git commits, grouped by tag",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pinelakedesign/grunt-changelog"
+  },
+  "author": {
+    "name": "Matthew Borgman",
+    "email": "matt.borgman@gmail.com",
+    "url": ""
+  },
+  "keywords": [
+    "changelog",
+    "git",
+    "tag"
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt": "~0.4.2",
+    "jshint-stylish": "~0.1.5",
+    "load-grunt-tasks": "~0.3.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}
