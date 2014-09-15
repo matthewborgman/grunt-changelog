@@ -13,27 +13,36 @@ module.exports = function (grunt) {
 
 			commits.forEach(function (commit, index) {
 
-				var	branchRegex		= /^\(.*\) /,
+				var	branches,
+					branchesRegex	= /^\((.*)\) /,
+					branchRegex		= /development|head|origin|production|staging/i,
 					buildRegex		= /^Generate Build.*/i,
 					changelogRegex	= /^Increment Version|^Update Changelog.*/im,
 					hash			= commit.substr(0, 7),
 					message			= commit.substr(8),
 					tag,
-					tagRegex		= /\(tag: (.*)\) (.*)/g;
+					tagRegex		= /\(tag: (.*)\) (.*)/g,
+					version;
 
 				// Parse a tag and output new heading
 				tag = tagRegex.exec(message);
 
 				if (tag) {
 
-					changelog += '\n' + tag[1] + '\n';
-					changelog += new Array((tag[1].length + 1)).join('-') + '\n';
+					// Split the tag into an array, but only retrieve the version
+					version = (tag[1].split(','))[0];
+					
+					changelog += '\n' + version + '\n';
+					changelog += new Array((version.length + 1)).join('-') + '\n';
 
-					message = tag[2].replace(branchRegex, '');
+					message = tag[2];
 				}
 
 				// Remove the branch name(s) from the message
-				message = message.replace(branchRegex, '');
+				branches = branchesRegex.exec(message);
+
+				if (branches && branchRegex.test(branches[1]))
+					message = message.replace(branches[0], '');
 
 				// Ensure the commit's not from bumping the version or generating a build
 				if (!buildRegex.test(message) && !changelogRegex.test(message))
