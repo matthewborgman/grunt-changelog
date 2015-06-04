@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.3.0 (2015-06-03)
+-------------------
+- Include the Date Alongside the Version Number (133a157)
+
 v0.2.0
 ------
 - Update Handling of Branch Names so They're Not Included or Non-Branch Name Words Containing Parentheses (6c1fc5a)
