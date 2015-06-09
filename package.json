@@ -30,8 +30,5 @@
   },
   "scripts": {
     "test": "grunt test"
-  },
-  "dependencies": {
-    "moment": "^2.10.3"
   }
 }
