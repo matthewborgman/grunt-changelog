@@ -1,8 +1,12 @@
 Changelog
 =========
 
-v0.3.0 (2015-06-03)
--------------------
+v0.3.1
+------
+- Revert "Include the Date Alongside the Version Number" Since the Date isn't Available for Each Commit Group (9d70418)
+
+v0.3.0
+------
 - Include the Date Alongside the Version Number (133a157)
 
 v0.2.0
