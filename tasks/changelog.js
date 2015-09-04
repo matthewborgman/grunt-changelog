@@ -1,5 +1,7 @@
 'use strict';
 
+var moment = require('moment');
+
 module.exports = function (grunt) {
 
 	grunt.registerMultiTask('changelog', 'Generate a Markdown-formatted changelog from git commits, grouped by tags', function () {
@@ -7,7 +9,7 @@ module.exports = function (grunt) {
         // Parse the commits and format the changelog
 		function parseCommits (commits) {
 
-			var	changelog = 'Changelog\n=========\n\nv' + options.version + '\n' + new Array((options.version.length + 2)).join('-') + '\n';
+			var	changelog = 'Changelog\n=========\n\nv' + options.version + ' (' + moment().format('YYYY-MM-DD') + ')\n' + new Array((options.version.length + 15)).join('-') + '\n';
 
 			commits = commits.toString().split(/\n/g);
 
@@ -18,10 +20,11 @@ module.exports = function (grunt) {
 					branchRegex		= /development|head|origin|production|staging/i,
 					buildRegex		= /^Generate Build.*/i,
 					changelogRegex	= /^Increment Version|^Update Changelog.*/im,
+					date			= commit.substr(8, 10),
 					hash			= commit.substr(0, 7),
-					message			= commit.substr(8),
+					message			= commit.substr(20),
 					tag,
-					tagRegex		= /\(tag: (.*)\) (.*)/g,
+					tagRegex		= /tag: (.*),?\) (.*)/g,
 					version;
 
 				// Parse a tag and output new heading
@@ -31,9 +34,9 @@ module.exports = function (grunt) {
 
 					// Split the tag into an array, but only retrieve the version
 					version = (tag[1].split(','))[0];
-					
-					changelog += '\n' + version + '\n';
-					changelog += new Array((version.length + 1)).join('-') + '\n';
+
+					changelog += '\n' + version + ' (' + date + ')' + '\n';
+					changelog += new Array((version.length + 1 + 13)).join('-') + '\n';
 
 					message = tag[2];
 				}
@@ -70,7 +73,7 @@ module.exports = function (grunt) {
         // Return commits
 		grunt.util.spawn({
 			cmd: 'git',
-			args: ['log', '--decorate']
+			args: ['log', '--date=short', "--pretty=%h %cd %d %s"]
 		},
 		function (error, result) {
 
