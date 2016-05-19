@@ -32,6 +32,7 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "moment": "^2.10.6"
+    "moment": "^2.10.6",
+    "underscore": "^1.8.3"
   }
 }

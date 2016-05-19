@@ -1,10 +1,76 @@
 'use strict';
 
-var moment = require('moment');
+var moment	= require('moment'),
+	path	= require('path'),
+	_		= require('underscore');
 
 module.exports = function (grunt) {
 
 	grunt.registerMultiTask('changelog', 'Generate a Markdown-formatted changelog from git commits, grouped by tags', function () {
+
+		// Stage the remaining files in Git
+		function addBuiltFilesToIndex () {
+
+			grunt.util.spawn({
+				cmd: 'git',
+				args: ['add', '.']
+			},
+			function (error, result) {
+
+				if (error)	handleError(error);
+				else		commitBuiltFiles();
+			});
+		}
+
+		// Stage the changelog-related files in Git
+		function addChangelogFilesToIndex () {
+
+			grunt.util.spawn({
+				cmd: 'git',
+				args: ['add'].concat(options.files)
+			},
+			function (error, result) {
+
+				if (error)	handleError(error);
+				else		commitChangelogFiles();
+			});
+		}
+
+		// Commit the built files to Git
+		function commitBuiltFiles () {
+
+			grunt.util.spawn({
+				cmd: 'git',
+				args: ['commit', '--message', 'Generate Build for v' + options.version]
+			},
+			function (error, result) {
+
+				if (error && -1 === result.stdout.indexOf('clean'))	handleError(error);
+				else												tagLastCommit();
+			});
+		}
+
+		// Commit the changelog-related files to Git
+		function commitChangelogFiles () {
+
+			grunt.util.spawn({
+				cmd: 'git',
+				args: ['commit', '--message', 'Increment Version Number and Update Changelog']
+			},
+			function (error, result) {
+
+				if (error)	handleError(error);
+				else		addBuiltFilesToIndex();
+			});
+		}
+
+		// Handle any errors encountered in the task
+		function handleError (error) {
+
+			grunt.log.error(error);
+
+			done(false);
+		}
 
         // Parse the commits and format the changelog
 		function parseCommits (commits) {
@@ -55,20 +121,47 @@ module.exports = function (grunt) {
 			writeChangelog(changelog.trim());
 		}
 
+		// Tag the last commit in Git
+		function tagLastCommit () {
+
+			grunt.util.spawn({
+				cmd: 'git',
+				args: ['tag', '-a', 'v' + options.version, '-m', 'v' + options.version]
+			},
+			function (error, result) {
+
+				if (error)
+					return handleError(error);
+
+				grunt.log.writeln('Changelog generated at '+ options.dest.toString().cyan + '.');
+
+				done();
+			});
+		}
+
         // Output the generated changelog
 		function writeChangelog (changelog) {
 
 			grunt.file.write(options.dest, changelog);
 
-			grunt.log.writeln('Changelog generated at '+ options.dest.toString().cyan + '.');
+			addChangelogFilesToIndex();
 		}
 
 		// Merge task-specific and/or target-specific options with these defaults.
 		var	done	= this.async(),
 			options	= this.options({
 				dest: './changelog.md',
+				files: ['./changelog.md', './package.json'],
 				version: '0.0.0'
 			});
+
+		// Normalize the paths to the changelog-related files, then deduplicate
+		options.files = _.map(options.files, function (file) {
+
+			return path.resolve(file);
+		});
+
+		options.files = _.unique(options.files, false);
 
         // Return commits
 		grunt.util.spawn({
@@ -77,16 +170,8 @@ module.exports = function (grunt) {
 		},
 		function (error, result) {
 
-			if (error) {
-
-				grunt.log.error(error);
-
-				return done(false);
-			}
-
-			parseCommits(result);
-
-			done();
+			if (error)	handleError(error);
+			else		parseCommits(result);
 		});
 	});
 };

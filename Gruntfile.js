@@ -1,6 +1,6 @@
 /*
  * grunt-changelog
- * 
+ *
  * Copyright (c) 2014 Matthew Borgman
  * Licensed under the MIT license.
  */
@@ -27,6 +27,8 @@ module.exports = function (grunt) {
     changelog: {
       dist: {
         options: {
+          dest: './changelog.md',
+          files: ['./changelog.md', './package.json'],
           version: require('./package.json').version
         }
       }
