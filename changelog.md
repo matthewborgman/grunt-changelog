@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v0.5.0 (2016-05-19)
+-------------------
+- Update Task to Automatically Generate Commits for the Changelog and the Modified Files (3e794ef)
+- Ignore OS-Generated Files (318aeb0)
+- Update Editor Configuration to Not Insert a Final Newline (80637d5)
+
 v0.4.0 (2015-09-04)
 -------------------
 - Reimplement Including the Date Alongside the Version Number (c1e664c)
