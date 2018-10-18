@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.5.1 (2018-10-18)
+-------------------
+- Update Task to Remove Extra Whitespace From Commit Message Before Parsing (c1087ad)
+
 v0.5.0 (2016-05-19)
 -------------------
 - Update Task to Automatically Generate Commits for the Changelog and the Modified Files (3e794ef)
