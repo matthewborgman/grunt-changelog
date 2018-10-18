@@ -88,7 +88,7 @@ module.exports = function (grunt) {
 					changelogRegex	= /^Increment Version|^Update Changelog.*/im,
 					date			= commit.substr(8, 10),
 					hash			= commit.substr(0, 7),
-					message			= commit.substr(20),
+					message			= commit.substr(20).trim(),
 					tag,
 					tagRegex		= /tag: (.*),?\) (.*)/g,
 					version;
