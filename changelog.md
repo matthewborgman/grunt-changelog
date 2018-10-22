@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.5.2 (2018-10-22)
+-------------------
+- Fix Format of Commit Date and Hash, Which Was Causing Incorrect Parsing (af988cf)
+
 v0.5.1 (2018-10-18)
 -------------------
 - Update Task to Remove Extra Whitespace From Commit Message Before Parsing (c1087ad)
