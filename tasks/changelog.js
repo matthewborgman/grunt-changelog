@@ -86,12 +86,13 @@ module.exports = function (grunt) {
 					branchRegex		= /development|head|origin|production|staging/i,
 					buildRegex		= /^Generate Build.*/i,
 					changelogRegex	= /^Increment Version|^Update Changelog.*/im,
-					date			= commit.substr(8, 10),
-					hash			= commit.substr(0, 7),
+					date			= commit.substr(9, 10),
+					hash			= commit.substr(0, 8),
 					message			= commit.substr(20).trim(),
 					tag,
 					tagRegex		= /tag: (.*),?\) (.*)/g,
-					version;
+					version,
+					versionAndRefs;
 
 				// Parse a tag and output new heading
 				tag = tagRegex.exec(message);
@@ -99,7 +100,8 @@ module.exports = function (grunt) {
 				if (tag) {
 
 					// Split the tag into an array, but only retrieve the version
-					version = (tag[1].split(','))[0];
+					versionAndRefs	= tag[1].split(',');
+					version			= versionAndRefs[0];
 
 					changelog += '\n' + version + ' (' + date + ')' + '\n';
 					changelog += new Array((version.length + 1 + 13)).join('-') + '\n';
@@ -166,7 +168,7 @@ module.exports = function (grunt) {
         // Return commits
 		grunt.util.spawn({
 			cmd: 'git',
-			args: ['log', '--date=short', "--pretty=%h %cd %d %s"]
+			args: ['log', '--date=short', "--pretty=format:%h %cd %d %s"]
 		},
 		function (error, result) {
 
