@@ -112,7 +112,8 @@ module.exports = function (grunt) {
 				// Remove the branch name(s) from the message
 				branches = branchesRegex.exec(message);
 
-				if (branches && branchRegex.test(branches[1]))
+//				if (branches && branchRegex.test(branches[1]))
+				if (branches)
 					message = message.replace(branches[0], '');
 
 				// Ensure the commit's not from bumping the version or generating a build
